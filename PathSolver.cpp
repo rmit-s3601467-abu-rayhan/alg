@@ -188,8 +188,8 @@ void PathSolver::forwardSearch(Env env){
         //closedList forloop
         //
     //
-    
-    // int holder = 0;
+
+    int holder = 0;
     // Node * q = new Node(i, j, 0);
     while(true && /* endPos < 16 */ checker != 1){
         for(int z = 0; z < openList->getLength(); z++){
@@ -198,92 +198,78 @@ void PathSolver::forwardSearch(Env env){
             prevDist = smallestDist;
             smallestDist = newDist;
             if(smallestDist < prevDist){
-                for(int x = 0; x < closedList->getLength(); x++){
+                holder = z;
+            }
+            for(int x = 0; x < closedList->getLength(); x++){
                 // cout << "openlist row: " << openList->getNode(holder)->getRow()
                 // << "openlist col: " << openList->getNode(holder)->getCol() 
                 // << " closedlist row: " << closedList->getNode(x)->getRow() <<
                 // " closedlist col: " << closedList->getNode(x)->getCol() << endl;
-                    if(((openList->getNode(z)->getCol() != closedList->getNode(x)->getCol()) &&
-                            (openList->getNode(z)->getRow() != closedList->getNode(x)->getRow()) )||
-                        ((openList->getNode(z)->getRow() != closedList->getNode(x)->getRow())
-                        && (openList->getNode(z)->getCol() != closedList->getNode(x)->getCol()))){
-                            // holder = z; 
-                            p = openList->getNode(z);  
-                    }
+                if((openList->getNode(holder)->getCol() != closedList->getNode(x)->getCol() )||
+                    (openList->getNode(holder)->getRow() != closedList->getNode(x)->getRow())){
+                        // holder = z; 
+                        p = openList->getNode(holder);  
                 }
             }
         }
         if((p->getCol() == Goal->getCol()) && (p->getRow() == Goal->getRow())){
             checker = 1;           
         }
-        // cout << "holder: " << holder << endl;
-        // cout << "p-row: " << p->getRow() << " p-col: " << p->getCol() << endl;
-        // cout << "smallestDist: " << smallestDist << " prevDist: " << prevDist << endl;
-        // p = openList->getNode(holder);
         //for each position q in E that the robot can reach from p 
             //set dist_traveled of q to be one more then that of p
             //add q to openlist P ONLY if it is not in it already
         //end for loop
         i = p->getRow();
         j = p->getCol();
-        cout << "i: " << i << "," << j << endl;
-        //    if(env[i][j+1] != SYMBOL_WALL || env[i][j-1] != SYMBOL_WALL){
-                if(env[i][j+1] == SYMBOL_EMPTY || env[i][j+1] == SYMBOL_GOAL){
-                    // cout << "Eastb4index1 " << index1 << endl;
-                    // index1 = p->getDistanceTraveled()+1;
-                    // cout << "EastAfindex1 " << index1 << endl;
-                    if(p->getCol() != j+1){
-                        index1 = p->getDistanceTraveled()+1;
-                        p = new Node(i, j+1, index1);
-                        openList->addElement(p);
-                    }
-                    cout << "EastAfindex1 " << index1 << endl;
-                }
-        //         i = p->getRow();
-        // j = p->getCol();
-                if(env[i][j-1] == SYMBOL_EMPTY || env[i][j-1] == SYMBOL_GOAL){
-                    // cout << "Westb4index1 " << index1 << endl;
-                    // index1 = p->getDistanceTraveled()+1;
-                    // cout << "WestAfindex1 " << index1 << endl;
-                    if(p->getCol() != j-1){
-                        index1 = p->getDistanceTraveled()+1;
-                        p = new Node(i, j-1, index1);
-                        openList->addElement(p);
-                    }
-                    cout << "WestAfindex1 " << index1 << endl;
-                }
-        //         i = p->getRow();
-        // j = p->getCol();
-                if(env[i+1][j] == SYMBOL_EMPTY || env[i+1][j] == SYMBOL_GOAL){
-                    // cout << "Sb4index1 " << index1 << endl;
-                    // index1 = p->getDistanceTraveled()+1;
-                    // cout << "NAfindex1 " << index1 << endl;
-                    if(p->getRow() != i+1){
-                         index1 = p->getDistanceTraveled()+1;
-                        p = new Node(i+1, j, index1);
-                        openList->addElement(p);
-                    }
-                    cout << "SAfindex1 " << index1 << endl;
-                }
-        //         i = p->getRow();
-        // j = p->getCol();
-                if(env[i-1][j] == SYMBOL_EMPTY || env[i-1][j] == SYMBOL_GOAL){
-                    // cout << "Nb4index1 " << index1 << endl;
-                    // index1 = p->getDistanceTraveled()+1;
-                    // cout << "SAfindex1 " << index1 << endl;
-                    if(p->getRow() != i-1){
-                        index1 = p->getDistanceTraveled()+1;
-                        p = new Node(i-1, j, index1);
-                        openList->addElement(p);
-                    }
-                    cout << "NAfindex1 " << index1 << endl;
-                } 
-                  
-        //    }
-        // i = p->getRow();
-        // j = p->getCol();
-        //add p to closedList
         closedList->addElement(p);
+        cout << "i: " << i << "," << j << endl;
+        if(env[i][j+1] == SYMBOL_EMPTY || env[i][j+1] == SYMBOL_GOAL){
+            // cout << "Eastb4index1 " << index1 << endl;
+            // index1 = p->getDistanceTraveled()+1;
+            // cout << "EastAfindex1 " << index1 << endl;
+            if(p->getCol() != j+1){
+                index1 = p->getDistanceTraveled()+1;
+                p = new Node(i, j+1, index1);
+                openList->addElement(p);
+            }
+            // cout << "EastAfindex1 " << index1 << endl;
+        }
+        if(env[i][j-1] == SYMBOL_EMPTY || env[i][j-1] == SYMBOL_GOAL){
+            // cout << "Westb4index1 " << index1 << endl;
+            // index1 = p->getDistanceTraveled()+1;
+            // cout << "WestAfindex1 " << index1 << endl;
+            if(p->getCol() != j-1){
+                index1 = p->getDistanceTraveled()+1;
+                p = new Node(i, j-1, index1);
+                openList->addElement(p);
+            }
+            // cout << "WestAfindex1 " << index1 << endl;
+        }
+        if(env[i+1][j] == SYMBOL_EMPTY || env[i+1][j] == SYMBOL_GOAL){
+            // cout << "Sb4index1 " << index1 << endl;
+            // index1 = p->getDistanceTraveled()+1;
+            // cout << "NAfindex1 " << index1 << endl;
+            if(p->getRow() != i+1){
+                index1 = p->getDistanceTraveled()+1;
+                p = new Node(i+1, j, index1);
+                openList->addElement(p);
+            }
+            // cout << "SAfindex1 " << index1 << endl;
+        }
+        if(env[i-1][j] == SYMBOL_EMPTY || env[i-1][j] == SYMBOL_GOAL){
+            // cout << "Nb4index1 " << index1 << endl;
+            // index1 = p->getDistanceTraveled()+1;
+            // cout << "SAfindex1 " << index1 << endl;
+            if(p->getRow() != i-1){
+                index1 = p->getDistanceTraveled()+1;
+                p = new Node(i-1, j, index1);
+                openList->addElement(p);
+            }
+            // cout << "NAfindex1 " << index1 << endl;
+        }
+
+        cout << "closedList->getLength(): " << closedList->getLength() << endl;
+        // closedList->addElement(p);
         endPos++;
        
     }
@@ -292,7 +278,8 @@ void PathSolver::forwardSearch(Env env){
         cout << "closedList->row: " << closedList->getNode(g)->getRow() 
         << "closedList->col: " << closedList->getNode(g)->getCol() << endl; 
     }
-
+    // NodeList* nodesExplored;
+    closedList = nodesExplored;
     delete startPos;
     delete openList;
     delete closedList;
